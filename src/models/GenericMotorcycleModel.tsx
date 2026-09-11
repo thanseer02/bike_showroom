@@ -1,16 +1,17 @@
 import React, { forwardRef, useEffect } from 'react';
 import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
+import gsap from 'gsap';
 
-interface MT15ModelProps {
-  modelUrl?: string;
+interface GenericMotorcycleModelProps {
+  modelUrl: string;
   color?: string;
   isMobile?: boolean;
 }
 
-const MT15Model = React.memo(forwardRef<THREE.Group, MT15ModelProps>(({
-  modelUrl = '/models/mt15.glb',
-  color = '#0025a8',
+const GenericMotorcycleModel = React.memo(forwardRef<THREE.Group, GenericMotorcycleModelProps>(({
+  modelUrl,
+  color = '#000000',
   isMobile = false,
 }, ref) => {
   const { scene } = useGLTF(modelUrl, 'https://www.gstatic.com/draco/versioned/decoders/1.5.5/');
@@ -27,8 +28,6 @@ const MT15Model = React.memo(forwardRef<THREE.Group, MT15ModelProps>(({
   useEffect(() => {
     if (!scene || !color) return;
     
-    // Generic logic to find paint materials and animate them.
-    // In a production app, you would target specific material names, e.g. mat.name === 'BodyPaint'
     const targetColor = new THREE.Color(color);
     
     scene.traverse((child) => {
@@ -37,11 +36,7 @@ const MT15Model = React.memo(forwardRef<THREE.Group, MT15ModelProps>(({
         if (mesh.material) {
           const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
           materials.forEach((mat) => {
-            // Apply color to standard materials that might represent paint
-            // This is a robust placeholder architecture
             if (mat instanceof THREE.MeshStandardMaterial || mat instanceof THREE.MeshPhysicalMaterial) {
-              // We could filter by name if we knew it: if (mat.name.toLowerCase().includes('paint'))
-              // Animate color transition smoothly
               gsap.to(mat.color, {
                 r: targetColor.r,
                 g: targetColor.g,
@@ -63,8 +58,6 @@ const MT15Model = React.memo(forwardRef<THREE.Group, MT15ModelProps>(({
   );
 }));
 
-MT15Model.displayName = 'MT15Model';
+GenericMotorcycleModel.displayName = 'GenericMotorcycleModel';
 
-// useGLTF.preload('/models/mt15.glb');
-
-export default MT15Model;
+export default GenericMotorcycleModel;

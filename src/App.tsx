@@ -14,9 +14,11 @@ import './index.css';
 const App: React.FC = () => {
   useTextReveal();
   
-  const [selectedColors, setSelectedColors] = useState<Record<string, string>>({
-    'mt-15': motorcycles.find(m => m.id === 'mt-15')?.colors[0].hex || '#000',
-    'meteor-350': motorcycles.find(m => m.id === 'meteor-350')?.colors[0].hex || '#000',
+  const [selectedColors, setSelectedColors] = useState<Record<string, string>>(() => {
+    return motorcycles.reduce((acc, moto) => {
+      acc[moto.id] = moto.colors[0]?.hex || '#000';
+      return acc;
+    }, {} as Record<string, string>);
   });
 
   const [shouldLoadMeteor, setShouldLoadMeteor] = useState(false);

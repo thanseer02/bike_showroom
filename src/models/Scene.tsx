@@ -6,8 +6,7 @@ import ScrollAnimationManager from './ScrollAnimationManager';
 import { useIsMobile } from '../hooks/useIsMobile';
 import ModelErrorBoundary from '../components/ModelErrorBoundary';
 
-const MT15Model = React.lazy(() => import('./MT15Model'));
-const Meteor350Model = React.lazy(() => import('./Meteor350Model'));
+const GenericMotorcycleModel = React.lazy(() => import('./GenericMotorcycleModel'));
 
 interface SceneProps {
   className?: string;
@@ -57,14 +56,14 @@ const Scene: React.FC<SceneProps> = ({ className, style, colors, shouldLoadMeteo
         <Suspense fallback={null}>
           <ModelErrorBoundary>
             <group ref={mt15Ref}>
-              <MT15Model color={colors['mt-15']} isMobile={isMobile} />
+              <GenericMotorcycleModel modelUrl="/models/mt15.glb" color={colors['mt-15']} isMobile={isMobile} />
             </group>
           </ModelErrorBoundary>
           
           <ModelErrorBoundary>
             <group ref={meteorRef}>
               {shouldLoadMeteor && (
-                <Meteor350Model color={colors['meteor-350']} isMobile={isMobile} />
+                <GenericMotorcycleModel modelUrl="/models/meteor350.glb" color={colors['meteor-350']} isMobile={isMobile} />
               )}
             </group>
           </ModelErrorBoundary>

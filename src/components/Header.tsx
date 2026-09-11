@@ -28,12 +28,6 @@ const Header: React.FC = () => {
     textTransform: 'uppercase',
   };
 
-  const navLinksStyle: React.CSSProperties = {
-    display: 'flex',
-    gap: '3rem',
-    display: window.innerWidth > 768 ? 'flex' : 'none', // Simple responsive handling for now
-  };
-
   const linkStyle: React.CSSProperties = {
     fontSize: '0.875rem',
     fontWeight: 500,
@@ -41,24 +35,42 @@ const Header: React.FC = () => {
     textTransform: 'uppercase',
   };
 
-  return (
-    <header style={headerStyle}>
-      <div className="container" style={navContainerStyle}>
-        <div style={logoStyle}>Ride3D</div>
-        
-        <nav style={navLinksStyle}>
-          <a href="#home" style={linkStyle}>Home</a>
-          <a href="#models" style={linkStyle}>Motorcycles</a>
-          <a href="#compare" style={linkStyle}>Compare</a>
-          <a href="#about" style={linkStyle}>About</a>
-        </nav>
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
-        {/* Mobile menu button placeholder */}
-        <div style={{ display: window.innerWidth <= 768 ? 'block' : 'none', cursor: 'pointer' }}>
-           MENU
+  return (
+    <>
+      <header style={headerStyle}>
+        <div className="container" style={navContainerStyle}>
+          <div style={logoStyle}>Ride3D</div>
+          
+          <nav className="header-nav" aria-label="Main Navigation">
+            <a href="#home" style={linkStyle}>Home</a>
+            <a href="#models" style={linkStyle}>Motorcycles</a>
+            <a href="#compare" style={linkStyle}>Compare</a>
+            <a href="#about" style={linkStyle}>About</a>
+          </nav>
+
+          <button 
+            className="header-menu-btn" 
+            onClick={toggleMenu}
+            aria-expanded={isMenuOpen}
+            aria-label="Toggle navigation menu"
+          >
+             {isMenuOpen ? 'CLOSE' : 'MENU'}
+          </button>
         </div>
+      </header>
+
+      {/* Mobile Menu */}
+      <div className={`mobile-menu ${isMenuOpen ? 'open' : ''}`}>
+        <nav aria-label="Mobile Navigation" style={{ display: 'flex', flexDirection: 'column', gap: '2rem', alignItems: 'center' }}>
+          <a href="#home" onClick={toggleMenu}>Home</a>
+          <a href="#models" onClick={toggleMenu}>Motorcycles</a>
+          <a href="#compare" onClick={toggleMenu}>Compare</a>
+          <a href="#about" onClick={toggleMenu}>About</a>
+        </nav>
       </div>
-    </header>
+    </>
   );
 };
 
