@@ -41,9 +41,8 @@ const MotorcycleSection: React.FC<MotorcycleSectionProps> = ({
   };
 
   const visualStyle: React.CSSProperties = {
-    flex: '1 1 500px',
-    height: '500px',
-    // We leave this empty and transparent so the fixed 3D canvas behind it shines through
+    flex: '1 1 100%',
+    minHeight: '50vh', // Adjust height based on viewport for mobile
     pointerEvents: 'none',
   };
 

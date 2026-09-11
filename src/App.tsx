@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HeroSection from './sections/HeroSection';
@@ -7,8 +7,8 @@ import ComparisonSection from './sections/ComparisonSection';
 import SpecsSection from './sections/SpecsSection';
 import Scene from './models/Scene';
 import { motorcycles } from './data/motorcycles';
-import { useState } from 'react';
 import { useTextReveal } from './hooks/useTextReveal';
+import LoadingScreen from './components/LoadingScreen';
 import './index.css';
 
 const App: React.FC = () => {
@@ -19,14 +19,38 @@ const App: React.FC = () => {
     'meteor-350': motorcycles.find(m => m.id === 'meteor-350')?.colors[0].hex || '#000',
   });
 
-  const handleColorChange = (id: string, hex: string) => {
+  const [shouldLoadMeteor, setShouldLoadMeteor] = useState(false);
+  const meteorSectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setShouldLoadMeteor(true);
+          observer.disconnect(); // only need to trigger once
+        }
+      },
+      { rootMargin: '500px' } // pre-load before it comes into view
+    );
+
+    if (meteorSectionRef.current) {
+      observer.observe(meteorSectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  const handleColorChange = useCallback((id: string, hex: string) => {
     setSelectedColors(prev => ({ ...prev, [id]: hex }));
-  };
+  }, []);
+  
   return (
     <div className="app-container">
+      <LoadingScreen />
+      
       {/* Global 3D Canvas fixed in the background */}
       <div id="canvas-container" style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: -1 }}>
-        <Scene colors={selectedColors} />
+        <Scene colors={selectedColors} shouldLoadMeteor={shouldLoadMeteor} />
       </div>
 
       <Header />
@@ -37,17 +61,18 @@ const App: React.FC = () => {
         
         <div id="models">
           {motorcycles.map((moto, index) => (
-            <MotorcycleSection 
-              key={moto.id}
-              id={moto.id}
-              name={moto.name}
-              tagline={moto.tagline}
-              description={moto.description}
-              reversed={index % 2 !== 0}
-              colors={moto.colors}
-              selectedColor={selectedColors[moto.id]}
-              onColorChange={(hex) => handleColorChange(moto.id, hex)}
-            />
+            <div key={moto.id} ref={moto.id === 'meteor-350' ? meteorSectionRef : null}>
+              <MotorcycleSection 
+                id={moto.id}
+                name={moto.name}
+                tagline={moto.tagline}
+                description={moto.description}
+                reversed={index % 2 !== 0}
+                colors={moto.colors}
+                selectedColor={selectedColors[moto.id]}
+                onColorChange={(hex) => handleColorChange(moto.id, hex)}
+              />
+            </div>
           ))}
         </div>
 

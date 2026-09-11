@@ -9,9 +9,10 @@ gsap.registerPlugin(ScrollTrigger);
 interface ScrollAnimationManagerProps {
   mt15Ref: React.RefObject<THREE.Group>;
   meteorRef: React.RefObject<THREE.Group>;
+  isMobile?: boolean;
 }
 
-const ScrollAnimationManager: React.FC<ScrollAnimationManagerProps> = ({ mt15Ref, meteorRef }) => {
+const ScrollAnimationManager: React.FC<ScrollAnimationManagerProps> = ({ mt15Ref, meteorRef, isMobile = false }) => {
   const { camera } = useThree();
 
   useEffect(() => {
@@ -67,10 +68,9 @@ const ScrollAnimationManager: React.FC<ScrollAnimationManagerProps> = ({ mt15Ref
 
 
     // 3. Meteor -> Comparison (Entrance)
-    const compareIsMobile = window.innerWidth <= 768;
-    const mt15TargetX = compareIsMobile ? -0.8 : -1.5;
-    const meteorTargetX = compareIsMobile ? 0.8 : 1.5;
-    const cameraZ = compareIsMobile ? 8 : 6;
+    const mt15TargetX = isMobile ? -0.8 : -1.5;
+    const meteorTargetX = isMobile ? 0.8 : 1.5;
+    const cameraZ = isMobile ? 8 : 6;
     
     gsap.timeline({
       scrollTrigger: {
@@ -131,7 +131,7 @@ const ScrollAnimationManager: React.FC<ScrollAnimationManagerProps> = ({ mt15Ref
     return () => {
       ScrollTrigger.getAll().forEach(t => t.kill());
     };
-  }, [camera, mt15Ref, meteorRef]);
+  }, [camera, mt15Ref, meteorRef, isMobile]);
 
   return null;
 };

@@ -16,7 +16,7 @@
   box-sizing: border-box;
 }
 
-body {
+html, body {
   font-family: 'Inter', sans-serif;
   background-color: transparent; /* Changed to let canvas show through */
   color: var(--color-text);

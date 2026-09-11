@@ -5,22 +5,24 @@ import * as THREE from 'three';
 interface Meteor350ModelProps {
   modelUrl?: string;
   color?: string;
+  isMobile?: boolean;
 }
 
-const Meteor350Model = forwardRef<THREE.Group, Meteor350ModelProps>(({
+const Meteor350Model = React.memo(forwardRef<THREE.Group, Meteor350ModelProps>(({
   modelUrl = '/models/meteor350.glb',
   color = '#facc15',
+  isMobile = false,
 }, ref) => {
-  const { scene } = useGLTF(modelUrl);
+  const { scene } = useGLTF(modelUrl, 'https://www.gstatic.com/draco/versioned/decoders/1.5.5/');
 
   useEffect(() => {
     scene.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
-        child.castShadow = true;
-        child.receiveShadow = true;
+        child.castShadow = !isMobile;
+        child.receiveShadow = !isMobile;
       }
     });
-  }, [scene]);
+  }, [scene, isMobile]);
 
   useEffect(() => {
     if (!scene || !color) return;
@@ -56,7 +58,7 @@ const Meteor350Model = forwardRef<THREE.Group, Meteor350ModelProps>(({
       <primitive object={scene} />
     </group>
   );
-});
+}));
 
 Meteor350Model.displayName = 'Meteor350Model';
 

@@ -2,23 +2,28 @@ import React, { Suspense, useRef } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { PerspectiveCamera, Environment, ContactShadows } from '@react-three/drei';
 import * as THREE from 'three';
-import MT15Model from './MT15Model';
-import Meteor350Model from './Meteor350Model';
 import ScrollAnimationManager from './ScrollAnimationManager';
+import { useIsMobile } from '../hooks/useIsMobile';
+import ModelErrorBoundary from '../components/ModelErrorBoundary';
+
+const MT15Model = React.lazy(() => import('./MT15Model'));
+const Meteor350Model = React.lazy(() => import('./Meteor350Model'));
 
 interface SceneProps {
   className?: string;
   style?: React.CSSProperties;
   colors: Record<string, string>;
+  shouldLoadMeteor?: boolean;
 }
 
-const Scene: React.FC<SceneProps> = ({ className, style, colors }) => {
+const Scene: React.FC<SceneProps> = ({ className, style, colors, shouldLoadMeteor = false }) => {
   const mt15Ref = useRef<THREE.Group>(null);
   const meteorRef = useRef<THREE.Group>(null);
+  const isMobile = useIsMobile();
 
   return (
     <div className={className} style={{ width: '100%', height: '100%', ...style }}>
-      <Canvas shadows dpr={[1, 2]}>
+      <Canvas shadows={!isMobile} dpr={isMobile ? [1, 1] : [1, 2]}>
         <PerspectiveCamera makeDefault position={[4, 1.5, 4]} fov={45} />
         
         {/* Lights */}
@@ -26,9 +31,9 @@ const Scene: React.FC<SceneProps> = ({ className, style, colors }) => {
         <directionalLight 
           position={[5, 10, 5]} 
           intensity={1.5} 
-          castShadow 
-          shadow-mapSize-width={2048} 
-          shadow-mapSize-height={2048} 
+          castShadow={!isMobile} 
+          shadow-mapSize-width={isMobile ? 512 : 2048} 
+          shadow-mapSize-height={isMobile ? 512 : 2048} 
           shadow-bias={-0.0001}
         />
         <spotLight 
@@ -36,7 +41,7 @@ const Scene: React.FC<SceneProps> = ({ className, style, colors }) => {
           intensity={2} 
           penumbra={1} 
           angle={0.6}
-          castShadow 
+          castShadow={!isMobile} 
           color="#ffffff" 
         />
         <spotLight 
@@ -47,26 +52,39 @@ const Scene: React.FC<SceneProps> = ({ className, style, colors }) => {
         />
 
         {/* Environment for realistic reflections */}
-        <Environment preset="city" />
+        {!isMobile && <Environment preset="city" />}
 
         <Suspense fallback={null}>
-          <MT15Model ref={mt15Ref} color={colors['mt-15']} />
-          <Meteor350Model ref={meteorRef} color={colors['meteor-350']} />
+          <ModelErrorBoundary>
+            <group ref={mt15Ref}>
+              <MT15Model color={colors['mt-15']} isMobile={isMobile} />
+            </group>
+          </ModelErrorBoundary>
+          
+          <ModelErrorBoundary>
+            <group ref={meteorRef}>
+              {shouldLoadMeteor && (
+                <Meteor350Model color={colors['meteor-350']} isMobile={isMobile} />
+              )}
+            </group>
+          </ModelErrorBoundary>
         </Suspense>
 
         {/* Ground & Shadows */}
-        <ContactShadows 
-          position={[0, 0, 0]} 
-          opacity={0.8} 
-          scale={10} 
-          blur={2.5} 
-          far={4} 
-          color="#000000"
-          resolution={512}
-        />
+        {!isMobile && (
+          <ContactShadows 
+            position={[0, 0, 0]} 
+            opacity={0.8} 
+            scale={10} 
+            blur={2.5} 
+            far={4} 
+            color="#000000"
+            resolution={512}
+          />
+        )}
         
         {/* GSAP Scroll Logic */}
-        <ScrollAnimationManager mt15Ref={mt15Ref} meteorRef={meteorRef} />
+        <ScrollAnimationManager mt15Ref={mt15Ref} meteorRef={meteorRef} isMobile={isMobile} />
       </Canvas>
     </div>
   );

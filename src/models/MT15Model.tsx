@@ -5,22 +5,24 @@ import * as THREE from 'three';
 interface MT15ModelProps {
   modelUrl?: string;
   color?: string;
+  isMobile?: boolean;
 }
 
-const MT15Model = forwardRef<THREE.Group, MT15ModelProps>(({
+const MT15Model = React.memo(forwardRef<THREE.Group, MT15ModelProps>(({
   modelUrl = '/models/mt15.glb',
   color = '#0025a8',
+  isMobile = false,
 }, ref) => {
-  const { scene } = useGLTF(modelUrl);
+  const { scene } = useGLTF(modelUrl, 'https://www.gstatic.com/draco/versioned/decoders/1.5.5/');
 
   useEffect(() => {
     scene.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
-        child.castShadow = true;
-        child.receiveShadow = true;
+        child.castShadow = !isMobile;
+        child.receiveShadow = !isMobile;
       }
     });
-  }, [scene]);
+  }, [scene, isMobile]);
 
   useEffect(() => {
     if (!scene || !color) return;
@@ -59,7 +61,7 @@ const MT15Model = forwardRef<THREE.Group, MT15ModelProps>(({
       <primitive object={scene} />
     </group>
   );
-});
+}));
 
 MT15Model.displayName = 'MT15Model';
 
