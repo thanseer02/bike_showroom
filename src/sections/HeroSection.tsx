@@ -20,13 +20,15 @@ const HeroSection: React.FC = () => {
     <section id="home" style={heroStyle}>
       <div className="container" style={{ width: '100%' }}>
         <div style={contentStyle}>
-          <h1 className="heading-xl" style={{ marginBottom: '1rem' }}>
+          <h1 className="heading-xl gsap-reveal" style={{ marginBottom: '1rem' }}>
             Pure<br />Adrenaline.
           </h1>
-          <p className="text-muted" style={{ fontSize: '1.25rem', marginBottom: '3rem', maxWidth: '400px' }}>
+          <p className="text-muted gsap-reveal" style={{ fontSize: '1.25rem', marginBottom: '3rem', maxWidth: '400px' }}>
             Experience the raw power of the Yamaha MT-15 and the timeless cruise of the Meteor 350 in full 3D.
           </p>
-          <Button variant="primary">Explore Models</Button>
+          <div className="gsap-reveal">
+            <Button variant="primary">Explore Models</Button>
+          </div>
         </div>
       </div>
       

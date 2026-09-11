@@ -8,9 +8,12 @@ import SpecsSection from './sections/SpecsSection';
 import Scene from './models/Scene';
 import { motorcycles } from './data/motorcycles';
 import { useState } from 'react';
+import { useTextReveal } from './hooks/useTextReveal';
 import './index.css';
 
 const App: React.FC = () => {
+  useTextReveal();
+  
   const [selectedColors, setSelectedColors] = useState<Record<string, string>>({
     'mt-15': motorcycles.find(m => m.id === 'mt-15')?.colors[0].hex || '#000',
     'meteor-350': motorcycles.find(m => m.id === 'meteor-350')?.colors[0].hex || '#000',

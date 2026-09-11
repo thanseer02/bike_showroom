@@ -52,14 +52,16 @@ const MotorcycleSection: React.FC<MotorcycleSectionProps> = ({
       <div className="container" style={{ width: '100%' }}>
         <div style={layoutStyle}>
           <div style={textStyle}>
-            <h3 style={{ color: 'var(--color-accent)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '1rem', fontSize: '0.875rem' }}>
+            <h3 className="gsap-reveal" style={{ color: 'var(--color-accent)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '1rem', fontSize: '0.875rem' }}>
               {tagline}
             </h3>
-            <h2 className="heading-lg" style={{ marginBottom: '1.5rem' }}>{name}</h2>
-            <p className="text-muted" style={{ marginBottom: '2.5rem', fontSize: '1.125rem' }}>
+            <h2 className="heading-lg gsap-reveal" style={{ marginBottom: '1.5rem' }}>{name}</h2>
+            <p className="text-muted gsap-reveal" style={{ marginBottom: '2.5rem', fontSize: '1.125rem' }}>
               {description}
             </p>
-            <Button variant="outline">View Specifications</Button>
+            <div className="gsap-reveal">
+              <Button variant="outline">View Specifications</Button>
+            </div>
             
             {colors && selectedColor && onColorChange && (
               <ColorSelector 
