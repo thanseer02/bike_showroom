@@ -1,5 +1,5 @@
 import React from 'react';
-import { MotorcycleColor } from '../data/motorcycles';
+import type { MotorcycleColor } from '../data/motorcycles';
 
 interface ColorSelectorProps {
   colors: MotorcycleColor[];

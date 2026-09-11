@@ -5,6 +5,7 @@ import HeroSection from './sections/HeroSection';
 import MotorcycleSection from './sections/MotorcycleSection';
 import ComparisonSection from './sections/ComparisonSection';
 import SpecsSection from './sections/SpecsSection';
+import CtaSection from './sections/CtaSection';
 import Scene from './models/Scene';
 import { motorcycles } from './data/motorcycles';
 import { useTextReveal } from './hooks/useTextReveal';

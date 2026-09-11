@@ -1,5 +1,5 @@
 import React from 'react';
-import { MotorcycleData } from '../data/motorcycles';
+import type { MotorcycleData } from '../data/motorcycles';
 
 interface MotorcycleSpecsProps {
   data: MotorcycleData;

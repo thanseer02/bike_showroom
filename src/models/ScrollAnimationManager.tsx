@@ -7,8 +7,8 @@ import * as THREE from 'three';
 gsap.registerPlugin(ScrollTrigger);
 
 interface ScrollAnimationManagerProps {
-  mt15Ref: React.RefObject<THREE.Group>;
-  meteorRef: React.RefObject<THREE.Group>;
+  mt15Ref: React.RefObject<THREE.Group | null>;
+  meteorRef: React.RefObject<THREE.Group | null>;
   isMobile?: boolean;
 }
 

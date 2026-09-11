@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '../components/Button';
 import ColorSelector from '../components/ColorSelector';
-import { MotorcycleColor } from '../data/motorcycles';
+import type { MotorcycleColor } from '../data/motorcycles';
 
 interface MotorcycleSectionProps {
   id: string;
@@ -32,47 +32,45 @@ const MotorcycleSection: React.FC<MotorcycleSectionProps> = ({
     flexWrap: 'wrap',
   };
 
-  const textStyle: React.CSSProperties = {
-    flex: '1 1 400px',
-    background: 'rgba(5, 5, 5, 0.5)',
-    padding: '2rem',
-    borderRadius: '1rem',
-    backdropFilter: 'blur(10px)',
-  };
-
-  const visualStyle: React.CSSProperties = {
-    flex: '1 1 100%',
-    minHeight: '50vh', // Adjust height based on viewport for mobile
-    pointerEvents: 'none',
-  };
-
   return (
     <section id={id} className="section" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
-      <div className="container" style={{ width: '100%' }}>
+      <div className="container" style={{ width: '100%', position: 'relative', zIndex: 10 }}>
         <div style={layoutStyle}>
-          <div style={textStyle}>
-            <h3 className="gsap-reveal" style={{ color: 'var(--color-accent)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '1rem', fontSize: '0.875rem' }}>
+          {/* 3D Model visual space */}
+          <div style={{ flex: '1 1 100%', minHeight: '50vh', pointerEvents: 'none' }} />
+
+          {/* Text Content in Glass Panel */}
+          <div className="glass-panel" style={{ flex: '1 1 100%', maxWidth: '600px', position: 'relative' }}>
+             {/* Radial glow for the panel */}
+             <div className="radial-glow" style={{
+                top: '-20%',
+                right: '-20%',
+                width: '300px',
+                height: '300px',
+                background: 'var(--color-glow)',
+              }}></div>
+
+            <h3 className="text-muted" style={{ fontFamily: 'Outfit', textTransform: 'uppercase', letterSpacing: '3px', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: 700 }}>
               {tagline}
             </h3>
-            <h2 className="heading-lg gsap-reveal" style={{ marginBottom: '1.5rem' }}>{name}</h2>
-            <p className="text-muted gsap-reveal" style={{ marginBottom: '2.5rem', fontSize: '1.125rem' }}>
+            <h2 className="heading-lg" style={{ marginBottom: '1.5rem', textShadow: '0 4px 20px rgba(0,0,0,0.5)' }}>
+              {name}
+            </h2>
+            <p className="text-muted" style={{ fontSize: '1.125rem', marginBottom: '2.5rem', lineHeight: 1.8 }}>
               {description}
             </p>
-            <div className="gsap-reveal">
-              <Button variant="outline">View Specifications</Button>
+
+            <div style={{ marginBottom: '2.5rem' }}>
+              {colors && selectedColor && onColorChange && (
+                <ColorSelector colors={colors} selectedColorHex={selectedColor} onSelectColor={onColorChange} />
+              )}
             </div>
-            
-            {colors && selectedColor && onColorChange && (
-              <ColorSelector 
-                colors={colors}
-                selectedColorHex={selectedColor}
-                onSelectColor={onColorChange}
-              />
-            )}
+
+            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+              <Button variant="primary">Build & Price</Button>
+              <Button variant="secondary">View Specs</Button>
+            </div>
           </div>
-          
-          {/* Spacer block for the 3D model */}
-          <div style={visualStyle}></div>
         </div>
       </div>
     </section>
