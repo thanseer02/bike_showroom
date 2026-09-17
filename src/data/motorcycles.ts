@@ -15,6 +15,7 @@ export interface MotorcycleData {
   tagline: string;
   description: string;
   colors: MotorcycleColor[];
+  imageUrl?: string;
   specs: {
     engine: string;
     displacement: string;
@@ -50,7 +51,8 @@ export const motorcycles: MotorcycleData[] = [
       { name: 'Racing Blue', hex: '#0025a8' },
       { name: 'Cyan Storm', hex: '#00bcd4' },
       { name: 'Metallic Black', hex: '#111111' }
-    ]
+    ],
+    imageUrl: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?q=80&w=2070&auto=format&fit=crop'
   },
   {
     id: 'meteor-350',
@@ -73,6 +75,7 @@ export const motorcycles: MotorcycleData[] = [
       { name: 'Fireball Yellow', hex: '#facc15' },
       { name: 'Stellar Red', hex: '#991b1b' },
       { name: 'Supernova Blue', hex: '#1e3a8a' }
-    ]
+    ],
+    imageUrl: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?q=80&w=2070&auto=format&fit=crop'
   }
 ];

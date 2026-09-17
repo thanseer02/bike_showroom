@@ -10,6 +10,7 @@ interface MotorcycleSectionProps {
   description: string;
   reversed?: boolean;
   colors?: MotorcycleColor[];
+  imageUrl?: string;
   selectedColor?: string;
   onColorChange?: (hex: string) => void;
 }
@@ -21,6 +22,7 @@ const MotorcycleSection: React.FC<MotorcycleSectionProps> = ({
   description, 
   reversed = false,
   colors,
+  imageUrl,
   selectedColor,
   onColorChange
 }) => {
@@ -36,8 +38,23 @@ const MotorcycleSection: React.FC<MotorcycleSectionProps> = ({
     <section id={id} className="section" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
       <div className="container" style={{ width: '100%', position: 'relative', zIndex: 10 }}>
         <div style={layoutStyle}>
-          {/* 3D Model visual space */}
-          <div style={{ flex: '1 1 100%', minHeight: '50vh', pointerEvents: 'none' }} />
+          {/* 3D Model visual space or Image Fallback */}
+          <div style={{ flex: '1 1 100%', minHeight: '50vh', pointerEvents: 'none', position: 'relative' }}>
+            {imageUrl && (
+              <img 
+                src={imageUrl} 
+                alt={name} 
+                style={{ 
+                  width: '100%', 
+                  height: '100%', 
+                  objectFit: 'cover', 
+                  borderRadius: '16px',
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+                  opacity: 0.8
+                }} 
+              />
+            )}
+          </div>
 
           {/* Text Content in Glass Panel */}
           <div className="glass-panel" style={{ flex: '1 1 100%', maxWidth: '600px', position: 'relative' }}>

@@ -72,6 +72,7 @@ const App: React.FC = () => {
                 description={moto.description}
                 reversed={index % 2 !== 0}
                 colors={moto.colors}
+                imageUrl={moto.imageUrl}
                 selectedColor={selectedColors[moto.id]}
                 onColorChange={(hex) => handleColorChange(moto.id, hex)}
               />
